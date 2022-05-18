@@ -69,6 +69,11 @@ export default {
                     this.loading = false;
                     this.error = error;
                 });
+
+                this.websocket.addEventListener('message', event => {
+                    const frame = JSON.parse(event.data);
+                    this.$store.commit('addFrame', frame);
+                });
             } catch(e) {
                 this.errorSnackbar = true;
                 this.loading = false;
