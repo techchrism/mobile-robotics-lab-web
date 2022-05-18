@@ -22,7 +22,7 @@
         </v-navigation-drawer>
 
         <v-main>
-            <HelloWorld/>
+            <ArenaCanvas/>
         </v-main>
     </v-app>
 </template>
@@ -31,11 +31,13 @@
 import HelloWorld from './components/HelloWorld';
 import WebsocketConnection from "@/components/WebsocketConnection";
 import FrameSidebar from "@/components/FrameSidebar";
+import ArenaCanvas from "@/components/ArenaCanvas";
 
 export default {
     name: 'App',
 
     components: {
+        ArenaCanvas,
         FrameSidebar,
         WebsocketConnection,
         HelloWorld,
