@@ -5,6 +5,11 @@
 </template>
 
 <script>
+const arenaHeightMM = 2 * 1000;
+const arenaWidthMM = arenaHeightMM;
+const robotRadiusMM = 100;
+const ultrasonicMaxRangeMM = 500;
+
 export default {
     name: 'ArenaCanvas',
     data: () => ({
@@ -37,40 +42,38 @@ export default {
             const ctx = this.$refs.canvas.getContext('2d');
             ctx.save();
             try {
-                ctx.scale(this.size / 1000, this.size / 1000);
-                ctx.clearRect(0, 0, 1000, 1000);
+                ctx.scale(this.size / arenaWidthMM, this.size / arenaHeightMM);
+                ctx.clearRect(0, 0, arenaWidthMM, arenaHeightMM);
 
                 // Outer border
                 ctx.fillStyle = 'black';
-                ctx.fillRect(0, 0, 1000, 1000);
+                ctx.fillRect(0, 0, arenaWidthMM, arenaHeightMM);
                 ctx.fillStyle = 'white';
                 const borderRadius = 5;
-                ctx.fillRect(borderRadius, borderRadius, 1000 - (borderRadius * 2), 1000 - (borderRadius * 2));
+                ctx.fillRect(borderRadius, borderRadius, arenaWidthMM - (borderRadius * 2), arenaHeightMM - (borderRadius * 2));
 
                 // Center lines
                 ctx.fillStyle = 'black';
-                ctx.fillRect(499, 0, 2, 1000);
-                ctx.fillRect(0, 499, 1000, 2);
+                ctx.fillRect((arenaWidthMM / 2) - 1, 0, 2, arenaWidthMM);
+                ctx.fillRect(0, (arenaHeightMM / 2) - 1, arenaHeightMM, 2);
 
                 const frame = this.frame;
                 if(frame.hasOwnProperty('pos') && frame.hasOwnProperty('angle')) {
                     ctx.save();
-                    ctx.translate(frame.pos[0] + 500, (frame.pos[1] * -1) + 500);
+                    ctx.translate(frame.pos[0] + (arenaWidthMM / 2), (frame.pos[1] * -1) + (arenaHeightMM / 2));
                     ctx.rotate(frame.angle);
-
-                    const robotRadius = 50;
 
                     ctx.beginPath();
 
                     ctx.lineWidth = 5;
                     ctx.strokeStyle = 'blue';
-                    ctx.arc(0, 0 , robotRadius, 0, Math.PI * 2, true);
+                    ctx.arc(0, 0 , robotRadiusMM, 0, Math.PI * 2, true);
                     ctx.stroke();
 
                     ctx.beginPath();
                     ctx.lineWidth = 10;
                     ctx.moveTo(0, 0);
-                    ctx.lineTo(0, robotRadius * -1);
+                    ctx.lineTo(0, robotRadiusMM * -1);
                     ctx.stroke();
 
                     // Draw ultrasonics
@@ -80,7 +83,7 @@ export default {
                             const angle = (-0.5 * Math.PI) + (Math.PI * (i / (frame.ultrasonic.length - 1)));
 
                             ctx.rotate(angle);
-                            ctx.translate(0, -1 * robotRadius);
+                            ctx.translate(0, -1 * robotRadiusMM);
                             ctx.fillStyle = 'red';
                             ctx.fillRect(-3, 0, 6, -1 * Math.min(frame.ultrasonic[i], 50));
 
