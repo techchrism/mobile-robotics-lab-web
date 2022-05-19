@@ -1,24 +1,16 @@
 <template>
     <v-app>
-        <v-app-bar
-            app
-            color="primary"
-            dark
-            clipped-left
-        >
+        <v-app-bar app color="primary" dark clipped-left>
             <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 
             <div class="d-flex align-center">
-                <h2>Mobile Robotics Lab Telemetry</h2>
+                <h2>Lab Telemetry</h2>
             </div>
-
             <v-spacer></v-spacer>
-
-            <WebsocketConnection/>
         </v-app-bar>
 
         <v-navigation-drawer app v-model="drawer" absolute clipped>
-            <FrameSidebar/>
+            <WebsocketConnection/>
         </v-navigation-drawer>
 
         <v-main>
@@ -28,7 +20,6 @@
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
 import WebsocketConnection from "@/components/WebsocketConnection";
 import FrameSidebar from "@/components/FrameSidebar";
 import ArenaCanvas from "@/components/ArenaCanvas";
@@ -39,8 +30,7 @@ export default {
     components: {
         ArenaCanvas,
         FrameSidebar,
-        WebsocketConnection,
-        HelloWorld,
+        WebsocketConnection
     },
 
     data: () => ({

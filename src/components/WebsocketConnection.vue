@@ -1,8 +1,8 @@
 <template>
-    <div class="d-flex align-center">
-        <v-form class="d-flex align-center" action="javascript:void(0);">
+    <div class="d-flex align-center justify-center">
+        <v-form class="d-flex align-center flex-column" action="javascript:void(0);">
             <v-text-field outlined
-                          class="mr-2"
+                          class="ma-2"
                           background-color="white"
                           light
                           filled
