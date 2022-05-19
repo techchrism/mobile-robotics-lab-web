@@ -120,6 +120,14 @@ export default {
                             ctx.stroke();
                         }
                     }
+
+                    if(frame.hasOwnProperty('goal')) {
+                        ctx.beginPath();
+                        ctx.lineWidth = 20;
+                        ctx.fillStyle = 'green';
+                        ctx.arc((frame.goal[0] * 1000) + (arenaWidthMM / 2), (frame.goal[1] * -1000) + (arenaHeightMM / 2), 30, 0, Math.PI * 2, true);
+                        ctx.fill();
+                    }
                 }
             }
             catch(e) {
