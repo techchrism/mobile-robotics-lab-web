@@ -5,10 +5,10 @@
 </template>
 
 <script>
-const arenaHeightMM = 2 * 1000;
+const arenaHeightMM = 4 * 1000;
 const arenaWidthMM = arenaHeightMM;
-const robotRadiusMM = 100;
-const ultrasonicMaxRangeMM = 500;
+const robotRadiusMM = 140;
+const ultrasonicMaxRangeMM = 1500;
 
 export default {
     name: 'ArenaCanvas',
@@ -32,7 +32,7 @@ export default {
         onResize() {
             const computed = getComputedStyle(this.$refs.container);
             const containerWidth = this.$refs.container.offsetWidth - parseFloat(computed.paddingLeft) - parseFloat(computed.paddingRight);
-            this.size = Math.min(window.innerHeight, containerWidth);
+            this.size = Math.min(window.innerHeight - 100, containerWidth);
 
             this.$refs.canvas.width = this.size;
             this.$refs.canvas.height = this.size;
@@ -60,7 +60,9 @@ export default {
                 const frame = this.frame;
                 if(frame.hasOwnProperty('pos') && frame.hasOwnProperty('angle')) {
                     ctx.save();
-                    ctx.translate(frame.pos[0] + (arenaWidthMM / 2), (frame.pos[1] * -1) + (arenaHeightMM / 2));
+                    const botX = (frame.pos[0] * 1000);
+                    const botY = (frame.pos[1] * 1000) * -1;
+                    ctx.translate(botX + (arenaWidthMM / 2), (botY * -1) + (arenaHeightMM / 2));
                     ctx.rotate(frame.angle);
 
                     ctx.beginPath();
@@ -85,7 +87,7 @@ export default {
                             ctx.rotate(angle);
                             ctx.translate(0, -1 * robotRadiusMM);
                             ctx.fillStyle = 'red';
-                            ctx.fillRect(-3, 0, 6, -1 * Math.min(frame.ultrasonic[i], 50));
+                            ctx.fillRect(-3, 0, 6, -1 * Math.min(frame.ultrasonic[i] * 10, ultrasonicMaxRangeMM));
 
                             ctx.restore();
                         }
