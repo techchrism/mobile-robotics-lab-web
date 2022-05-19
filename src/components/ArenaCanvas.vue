@@ -1,6 +1,6 @@
 <template>
-    <v-container fluid ref="container" v-resize="onResize">
-        <canvas ref="canvas"></canvas>
+    <v-container fluid ref="container" v-resize="onResize" class="d-flex justify-center">
+        <canvas class="elevation-2" ref="canvas"></canvas>
     </v-container>
 </template>
 

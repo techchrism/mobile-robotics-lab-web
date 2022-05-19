@@ -9,12 +9,21 @@
             <v-spacer></v-spacer>
         </v-app-bar>
 
-        <v-navigation-drawer app v-model="drawer" absolute clipped>
+        <v-navigation-drawer app v-model="drawer" clipped>
             <WebsocketConnection/>
         </v-navigation-drawer>
 
         <v-main>
-            <ArenaCanvas/>
+            <v-container fluid>
+                <v-row>
+                    <v-col cols="12" md="6">
+                        <ArenaCanvas/>
+                    </v-col>
+                    <v-col cols="12" md="6">
+                        <FrameInfo/>
+                    </v-col>
+                </v-row>
+            </v-container>
         </v-main>
     </v-app>
 </template>
@@ -23,11 +32,13 @@
 import WebsocketConnection from "@/components/WebsocketConnection";
 import FrameSidebar from "@/components/FrameSidebar";
 import ArenaCanvas from "@/components/ArenaCanvas";
+import FrameInfo from "@/components/FrameInfo";
 
 export default {
     name: 'App',
 
     components: {
+        FrameInfo,
         ArenaCanvas,
         FrameSidebar,
         WebsocketConnection
