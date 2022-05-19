@@ -10,7 +10,7 @@ export default new Vuex.Store({
     mutations: {
         addFrame(state, frame) {
             state.frames.push(frame);
-            if(state.frames.length > 1000) {
+            if(state.frames.length > 10) {
                 state.frames.shift();
             }
         }

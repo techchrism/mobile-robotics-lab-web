@@ -8,7 +8,7 @@
 const arenaHeightMM = 4 * 1000;
 const arenaWidthMM = arenaHeightMM;
 const robotRadiusMM = 140;
-const ultrasonicMaxRangeMM = 1500;
+const ultrasonicMaxRangeMM = 1700;
 
 export default {
     name: 'ArenaCanvas',
@@ -58,42 +58,68 @@ export default {
                 ctx.fillRect(0, (arenaHeightMM / 2) - 1, arenaHeightMM, 2);
 
                 const frame = this.frame;
-                if(frame.hasOwnProperty('pos') && frame.hasOwnProperty('angle')) {
-                    ctx.save();
-                    const botX = (frame.pos[0] * 1000);
-                    const botY = (frame.pos[1] * 1000) * -1;
-                    ctx.translate(botX + (arenaWidthMM / 2), (botY * -1) + (arenaHeightMM / 2));
-                    ctx.rotate(frame.angle);
+                if(frame) {
+                    // Robot position, angle, and ultrasonics
+                    if(frame.hasOwnProperty('pos') && frame.hasOwnProperty('angle')) {
+                        ctx.save();
+                        const botX = (frame.pos[0] * 1000);
+                        const botY = (frame.pos[1] * 1000);
+                        ctx.translate(botX + (arenaWidthMM / 2), (botY * -1) + (arenaHeightMM / 2));
+                        ctx.rotate(frame.angle);
 
-                    ctx.beginPath();
+                        ctx.beginPath();
 
-                    ctx.lineWidth = 5;
-                    ctx.strokeStyle = 'blue';
-                    ctx.arc(0, 0 , robotRadiusMM, 0, Math.PI * 2, true);
-                    ctx.stroke();
+                        ctx.lineWidth = 5;
+                        ctx.strokeStyle = 'blue';
+                        ctx.arc(0, 0, robotRadiusMM, 0, Math.PI * 2, true);
+                        ctx.stroke();
 
-                    ctx.beginPath();
-                    ctx.lineWidth = 10;
-                    ctx.moveTo(0, 0);
-                    ctx.lineTo(0, robotRadiusMM * -1);
-                    ctx.stroke();
+                        ctx.beginPath();
+                        ctx.lineWidth = 10;
+                        ctx.moveTo(0, 0);
+                        ctx.lineTo(0, robotRadiusMM * -1);
+                        ctx.stroke();
 
-                    // Draw ultrasonics
-                    if(frame.hasOwnProperty('ultrasonic')) {
-                        for(let i = 0; i < frame.ultrasonic.length; i++) {
-                            ctx.save();
-                            const angle = (-0.5 * Math.PI) + (Math.PI * (i / (frame.ultrasonic.length - 1)));
+                        // Draw ultrasonics
+                        if (frame.hasOwnProperty('ultrasonic')) {
+                            for (let i = 0; i < frame.ultrasonic.length; i++) {
+                                ctx.save();
+                                const angle = (-0.5 * Math.PI) + (Math.PI * (i / (frame.ultrasonic.length - 1)));
 
-                            ctx.rotate(angle);
-                            ctx.translate(0, -1 * robotRadiusMM);
-                            ctx.fillStyle = 'red';
-                            ctx.fillRect(-3, 0, 6, -1 * Math.min(frame.ultrasonic[i] * 10, ultrasonicMaxRangeMM));
+                                ctx.rotate(angle);
+                                ctx.translate(0, -1 * robotRadiusMM);
+                                ctx.fillStyle = 'red';
+                                ctx.fillRect(-3, 0, 6, -1 * Math.min(frame.ultrasonic[i] * 10, ultrasonicMaxRangeMM));
 
-                            ctx.restore();
+                                ctx.restore();
+                            }
+                        }
+
+                        ctx.restore();
+                    }
+
+                    // Additional lines
+                    if(frame.hasOwnProperty('lines')) {
+                        for(const line of frame.lines) {
+                            ctx.beginPath();
+                            ctx.lineWidth = 10;
+                            ctx.strokeStyle = 'purple';
+                            ctx.moveTo(line[0][0] + (arenaWidthMM / 2), (line[0][1] * -1) + (arenaHeightMM / 2));
+                            ctx.lineTo(line[1][0] + (arenaWidthMM / 2), (line[1][1] * -1) + (arenaHeightMM / 2));
+                            ctx.stroke();
                         }
                     }
 
-                    ctx.restore();
+                    // Dots
+                    if(frame.hasOwnProperty('dots')) {
+                        for(const dot of frame.dots) {
+                            ctx.beginPath();
+                            ctx.lineWidth = 10;
+                            ctx.strokeStyle = 'purple';
+                            ctx.arc(dot[0] + (arenaWidthMM / 2), (dot[1] * -1) + (arenaHeightMM / 2), 10, 0, Math.PI * 2, true);
+                            ctx.stroke();
+                        }
+                    }
                 }
             }
             catch(e) {
