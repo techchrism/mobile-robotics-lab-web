@@ -53,6 +53,10 @@ export default {
             if(frame.hasOwnProperty('goal_distance')) {
                 items.push({name: 'Goal Distance', value: Math.round(frame.goal_distance * 100) / 100});
             }
+            if(frame.hasOwnProperty('v')) {
+                items.push({name: 'Forward Velocity', value: Math.round(frame.v * 100) / 100});
+                items.push({name: 'Angular Velocity', value: Math.round(frame.w * 100) / 100});
+            }
             return items;
         }
     }
