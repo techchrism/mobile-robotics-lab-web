@@ -11,6 +11,13 @@
 
         <v-navigation-drawer app v-model="drawer" clipped>
             <WebsocketConnection/>
+            <div class="d-flex align-center justify-center mt-2">
+                <v-btn @click="saveFrames">
+                    <v-icon left>mdi-cloud-download</v-icon>
+                    Save Frame Data
+                </v-btn>
+            </div>
+
         </v-navigation-drawer>
 
         <v-main>
@@ -33,19 +40,29 @@ import WebsocketConnection from "@/components/WebsocketConnection";
 import FrameSidebar from "@/components/FrameSidebar";
 import ArenaCanvas from "@/components/ArenaCanvas";
 import FrameInfo from "@/components/FrameInfo";
+import { saveAs } from 'file-saver';
 
 export default {
     name: 'App',
-
     components: {
         FrameInfo,
         ArenaCanvas,
         FrameSidebar,
         WebsocketConnection
     },
-
     data: () => ({
         drawer: null
     }),
+    methods: {
+        saveFrames() {
+            const stateStr = JSON.stringify(this.$store.state);
+            const bytes = new TextEncoder().encode(stateStr);
+            const blob = new Blob([bytes], {
+                type: 'application/json;charset=utf-8'
+            });
+
+            saveAs(blob, 'frames.json');
+        }
+    }
 };
 </script>
