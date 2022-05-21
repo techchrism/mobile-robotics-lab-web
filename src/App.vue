@@ -20,10 +20,12 @@
                 </v-btn>
 
                 <input type="file" hidden ref="fileInput" @change="fileChange"/>
-                <v-btn @click="loadFrames">
+                <v-btn @click="loadFrames" class="mb-3">
                     <v-icon left>mdi-cloud-upload</v-icon>
                     Load Frame Data
                 </v-btn>
+
+                <FramePlayback/>
             </div>
 
         </v-navigation-drawer>
@@ -49,6 +51,7 @@ import FrameSidebar from "@/components/FrameSidebar";
 import ArenaCanvas from "@/components/ArenaCanvas";
 import FrameInfo from "@/components/FrameInfo";
 import { saveAs } from 'file-saver';
+import FramePlayback from "@/components/FramePlayback";
 
 // From https://stackoverflow.com/a/66387148
 async function fileToJSON(file) {
@@ -63,6 +66,7 @@ async function fileToJSON(file) {
 export default {
     name: 'App',
     components: {
+        FramePlayback,
         FrameInfo,
         ArenaCanvas,
         FrameSidebar,
