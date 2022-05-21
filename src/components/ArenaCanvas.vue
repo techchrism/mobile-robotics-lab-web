@@ -16,7 +16,9 @@ export default {
         size: 0
     }),
     mounted() {
-
+        setTimeout(() => {
+            this.onResize();
+        }, 1);
     },
     computed: {
         frame() {
