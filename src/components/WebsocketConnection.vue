@@ -3,8 +3,6 @@
         <v-form class="d-flex align-center flex-column" action="javascript:void(0);">
             <v-text-field outlined
                           class="ma-2"
-                          background-color="white"
-                          light
                           filled
                           hide-details
                           v-model="ip"
