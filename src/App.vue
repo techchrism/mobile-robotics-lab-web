@@ -72,7 +72,13 @@ import DarkButton from "@/components/DarkButton";
 async function fileToJSON(file) {
     return new Promise((resolve, reject) => {
         const fileReader = new FileReader();
-        fileReader.onload = event => resolve(JSON.parse(event.target.result));
+        fileReader.onload = event => {
+            try {
+                resolve(JSON.parse(event.target.result));
+            } catch(e) {
+                reject(e);
+            }
+        }
         fileReader.onerror = error => reject(error);
         fileReader.readAsText(file);
     });
@@ -100,9 +106,14 @@ export default {
     },
     methods: {
         async fileChange(event) {
-            const data = await fileToJSON(event.target.files[0]);
-            this.$store.commit('loadState', data);
-            this.$store.commit('selectFrame', 0);
+            try {
+                const data = await fileToJSON(event.target.files[0]);
+                this.$store.commit('loadState', data);
+                this.$store.commit('selectFrame', 0);
+            } catch(e) {
+                console.error(e);
+                this.onError(e.toString());
+            }
         },
         saveFrames() {
             const stateStr = JSON.stringify(this.$store.state);
