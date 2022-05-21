@@ -7,6 +7,7 @@
                 <h2>Lab Telemetry</h2>
             </div>
             <v-spacer></v-spacer>
+            <DarkButton/>
         </v-app-bar>
 
         <v-navigation-drawer app v-model="drawer" clipped>
@@ -52,6 +53,7 @@ import ArenaCanvas from "@/components/ArenaCanvas";
 import FrameInfo from "@/components/FrameInfo";
 import { saveAs } from 'file-saver';
 import FramePlayback from "@/components/FramePlayback";
+import DarkButton from "@/components/DarkButton";
 
 // From https://stackoverflow.com/a/66387148
 async function fileToJSON(file) {
@@ -66,6 +68,7 @@ async function fileToJSON(file) {
 export default {
     name: 'App',
     components: {
+        DarkButton,
         FramePlayback,
         FrameInfo,
         ArenaCanvas,
