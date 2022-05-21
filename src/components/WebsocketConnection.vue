@@ -14,20 +14,6 @@
                 Disconnect
             </v-btn>
         </v-form>
-
-
-        <v-snackbar v-model="errorSnackbar" color="error" bottom>
-            {{error}}
-            <template v-slot:action="{ attrs }">
-                <v-btn
-                    text
-                    v-bind="attrs"
-                    @click="errorSnackbar = false"
-                >
-                    Close
-                </v-btn>
-            </template>
-        </v-snackbar>
     </div>
 </template>
 
@@ -38,10 +24,7 @@ export default {
         loading: false,
         connected: false,
         ip: 'ws://localhost:9090',
-        websocket: null,
-
-        errorSnackbar: false,
-        error: ''
+        websocket: null
     }),
     methods: {
         connect() {
@@ -63,9 +46,8 @@ export default {
 
                 this.websocket.addEventListener('error', error => {
                     console.error('Websocket error: ', error);
-                    this.errorSnackbar = true;
+                    this.$emit('error', 'Error connecting to websocket');
                     this.loading = false;
-                    this.error = error;
                 });
 
                 this.websocket.addEventListener('message', event => {
@@ -73,10 +55,8 @@ export default {
                     this.$store.commit('addFrame', frame);
                 });
             } catch(e) {
-                this.errorSnackbar = true;
                 this.loading = false;
-                this.error = e.toString();
-                console.error(e);
+                this.$emit('error', e.toString());
             }
         },
         disconnect() {

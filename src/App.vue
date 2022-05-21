@@ -11,7 +11,7 @@
         </v-app-bar>
 
         <v-navigation-drawer app v-model="drawer" clipped>
-            <WebsocketConnection/>
+            <WebsocketConnection @error="onError"/>
             <v-divider class="ma-3"/>
             <div class="d-flex align-center justify-center flex-column">
                 <p>{{frameCount}} frames</p>
@@ -32,6 +32,19 @@
         </v-navigation-drawer>
 
         <v-main>
+            <v-snackbar v-model="errorSnackbar" color="error" bottom>
+                {{error}}
+                <template v-slot:action="{ attrs }">
+                    <v-btn
+                        text
+                        v-bind="attrs"
+                        @click="errorSnackbar = false"
+                    >
+                        Close
+                    </v-btn>
+                </template>
+            </v-snackbar>
+
             <v-container fluid>
                 <v-row>
                     <v-col cols="12" md="6">
@@ -76,7 +89,9 @@ export default {
         WebsocketConnection
     },
     data: () => ({
-        drawer: null
+        drawer: null,
+        errorSnackbar: false,
+        error: ''
     }),
     computed: {
         frameCount() {
@@ -100,6 +115,10 @@ export default {
         },
         loadFrames() {
             this.$refs.fileInput.click();
+        },
+        onError(error) {
+            this.errorSnackbar = true;
+            this.error = error;
         }
     }
 };
