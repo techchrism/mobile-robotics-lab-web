@@ -10,9 +10,9 @@ export default new Vuex.Store({
     mutations: {
         addFrame(state, frame) {
             state.frames.push(frame);
-            if(state.frames.length > 10) {
-                state.frames.shift();
-            }
+        },
+        loadState(state, newState) {
+            state.frames = newState.frames;
         }
     },
     actions: {},
