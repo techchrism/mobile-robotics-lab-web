@@ -28,6 +28,9 @@ export default {
     watch: {
         frame() {
             this.draw();
+        },
+        '$vuetify.theme.dark': function() {
+            this.draw();
         }
     },
     methods: {
@@ -43,21 +46,34 @@ export default {
         draw() {
             const ctx = this.$refs.canvas.getContext('2d');
             ctx.save();
+
+            const palette = {
+                background: this.$vuetify.theme.dark ? '#121212' : '#FFFFFF',
+                backgroundLine: this.$vuetify.theme.dark ? '#d5d5d5de' : '#121212',
+                bot: this.$vuetify.theme.dark ? 'deepskyblue' : 'blue',
+                ultrasonic: 'red',
+                customLine: 'purple',
+                customDot: 'purple',
+                goal: this.$vuetify.theme.dark ? 'lightgreen' : 'green'
+            };
+
             try {
                 ctx.scale(this.size / arenaWidthMM, this.size / arenaHeightMM);
                 ctx.clearRect(0, 0, arenaWidthMM, arenaHeightMM);
 
+
                 // Outer border
-                ctx.fillStyle = 'black';
+                ctx.fillStyle = palette.backgroundLine;
                 ctx.fillRect(0, 0, arenaWidthMM, arenaHeightMM);
-                ctx.fillStyle = 'white';
-                const borderRadius = 5;
+                ctx.fillStyle = palette.background;
+                const borderRadius = 10;
                 ctx.fillRect(borderRadius, borderRadius, arenaWidthMM - (borderRadius * 2), arenaHeightMM - (borderRadius * 2));
 
                 // Center lines
-                ctx.fillStyle = 'black';
-                ctx.fillRect((arenaWidthMM / 2) - 1, 0, 2, arenaWidthMM);
-                ctx.fillRect(0, (arenaHeightMM / 2) - 1, arenaHeightMM, 2);
+                ctx.fillStyle = palette.backgroundLine;
+                const lineWidth = 8;
+                ctx.fillRect((arenaWidthMM / 2) - (lineWidth / 2), 0, lineWidth, arenaWidthMM);
+                ctx.fillRect(0, (arenaHeightMM / 2) - (lineWidth / 2), arenaHeightMM, lineWidth);
 
                 const frame = this.frame;
                 if(frame) {
@@ -71,27 +87,30 @@ export default {
 
                         ctx.beginPath();
 
-                        ctx.lineWidth = 5;
-                        ctx.strokeStyle = 'blue';
+                        const robotWidth = 10;
+                        ctx.lineWidth = robotWidth;
+                        ctx.strokeStyle = palette.bot;
                         ctx.arc(0, 0, robotRadiusMM, 0, Math.PI * 2, true);
                         ctx.stroke();
 
                         ctx.beginPath();
-                        ctx.lineWidth = 10;
+                        ctx.lineWidth = 20;
                         ctx.moveTo(0, 0);
                         ctx.lineTo(0, robotRadiusMM * -1);
                         ctx.stroke();
 
                         // Draw ultrasonics
+
                         if (frame.hasOwnProperty('ultrasonic')) {
+                            const ultrasonicWidth = 10;
                             for (let i = 0; i < frame.ultrasonic.length; i++) {
                                 ctx.save();
                                 const angle = (-0.5 * Math.PI) + (Math.PI * (i / (frame.ultrasonic.length - 1)));
 
                                 ctx.rotate(angle);
-                                ctx.translate(0, -1 * robotRadiusMM);
-                                ctx.fillStyle = 'red';
-                                ctx.fillRect(-3, 0, 6, -1 * Math.min(frame.ultrasonic[i] * 10, ultrasonicMaxRangeMM));
+                                ctx.translate(0, -1 * (robotRadiusMM + (robotWidth /2)));
+                                ctx.fillStyle = palette.ultrasonic;
+                                ctx.fillRect(-1 * (ultrasonicWidth / 2), 0, ultrasonicWidth, -1 * Math.min(frame.ultrasonic[i] * 10, ultrasonicMaxRangeMM));
 
                                 ctx.restore();
                             }
@@ -105,7 +124,7 @@ export default {
                         for(const line of frame.lines) {
                             ctx.beginPath();
                             ctx.lineWidth = 10;
-                            ctx.strokeStyle = 'purple';
+                            ctx.strokeStyle = palette.customLine;
                             ctx.moveTo(line[0][0] + (arenaWidthMM / 2), (line[0][1] * -1) + (arenaHeightMM / 2));
                             ctx.lineTo(line[1][0] + (arenaWidthMM / 2), (line[1][1] * -1) + (arenaHeightMM / 2));
                             ctx.stroke();
@@ -117,7 +136,7 @@ export default {
                         for(const dot of frame.dots) {
                             ctx.beginPath();
                             ctx.lineWidth = 10;
-                            ctx.strokeStyle = 'purple';
+                            ctx.strokeStyle = palette.customDot;
                             ctx.arc(dot[0] + (arenaWidthMM / 2), (dot[1] * -1) + (arenaHeightMM / 2), 10, 0, Math.PI * 2, true);
                             ctx.stroke();
                         }
@@ -126,7 +145,7 @@ export default {
                     if(frame.hasOwnProperty('goal')) {
                         ctx.beginPath();
                         ctx.lineWidth = 20;
-                        ctx.fillStyle = 'green';
+                        ctx.fillStyle = palette.goal;
                         ctx.arc((frame.goal[0] * 1000) + (arenaWidthMM / 2), (frame.goal[1] * -1000) + (arenaHeightMM / 2), 30, 0, Math.PI * 2, true);
                         ctx.fill();
                     }
