@@ -86,8 +86,8 @@ export default {
     methods: {
         async fileChange(event) {
             const data = await fileToJSON(event.target.files[0]);
-            console.log(data);
             this.$store.commit('loadState', data);
+            this.$store.commit('selectFrame', 0);
         },
         saveFrames() {
             const stateStr = JSON.stringify(this.$store.state);
